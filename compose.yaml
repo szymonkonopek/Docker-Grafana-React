@@ -16,3 +16,26 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - 3000:3000
+
+  influxdb:
+    image: influxdb:latest
+    ports:
+      - 8086:8086
+    environment:
+      - INFLUXDB_DB=mydb
+      - INFLUXDB_ADMIN_USER=admin
+      - INFLUXDB_ADMIN_PASSWORD=admin
+      - INFLUXDB_USER=myuser
+      - INFLUXDB_USER_PASSWORD=mypassword
+
+  telegraf:
+    image: telegraf:latest
+    volumes:
+      - ./telegraf.conf:/etc/telegraf/telegraf.conf
+    depends_on:
+      - influxdb
